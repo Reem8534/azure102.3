@@ -1,51 +1,135 @@
 # Overview
 
-<TODO: complete this with an overview of your project>
+In this project, I created a full CI/CD pipeline for a Flask-based machine learning application using:
+
+GitHub Actions for Continuous Integration (CI)
+
+Azure Pipelines for Continuous Delivery (CD)
+
+Azure App Service for hosting the app
+
+The project includes:
+
+Automated linting, testing, and packaging
+
+Deployment to Azure on every code change
+
+A Makefile and Bash scripts for reproducible workflow
+
+Architecture CI/CD Workflow:
+Developer pushes code to GitHub.
+
+GitHub Actions runs make all (install → lint → test).
+
+If CI passes, Azure Pipelines builds and deploys the app to Azure App Service.
 
 ## Project Plan
-<TODO: Project Plan
 
-* A link to a Trello board for the project
-* A link to a spreadsheet that includes the original and final project plan>
+the board: https://trello.com/b/6Gux9cPM/udacity
+the file: https://docs.google.com/spreadsheets/d/1pOmuhYMsWYRNB8kvIdr9X0hpKFXW3Ah6EVeq03g6uTw/edit?usp=sharing
 
 ## Instructions
+### Architectural Diagram 
+Description:
+diagram shows how the Flask ML application interacts with Azure services:
 
-<TODO:  
-* Architectural Diagram (Shows how key parts of the system work)>
+Code stored in GitHub
 
-<TODO:  Instructions for running the Python project.  How could a user with no context run this project without asking you for any help.  Include screenshots with explicit steps to create that work. Be sure to at least include the following screenshots:
+Azure DevOps Pipelines pull and deploy to Azure App Service
 
-* Project running on Azure App Service
+Flask app exposes /predict endpoint for ML predictions
 
-* Project cloned into Azure Cloud Shell
+User or other systems send data to the deployed app for inference
 
-* Passing tests that are displayed after running the `make all` command from the `Makefile`
+### 1.Clone the Project into Azure Cloud Shell 
+Open your Azure Cloud Shell and run:
 
-* Output of a test run
+'''
+git clone git@github.com:Reem8534/Azure102.3.git
+cd Azure102.3
+'''
 
-* Successful deploy of the project in Azure Pipelines.  [Note the official documentation should be referred to and double checked as you setup CI/CD](https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/python-webapp?view=azure-devops).
+### 2. Set Up Python Virtual Environment and Install Dependencies
+Create and activate a Python virtual environment:
 
-* Running Azure App Service from Azure Pipelines automatic deployment
+'''
+python3 -m venv ~/.udacity-devops
+source ~/.udacity-devops/bin/activate
+'''
 
-* Successful prediction from deployed flask app in Azure Cloud Shell.  [Use this file as a template for the deployed prediction](https://github.com/udacity/nd082-Azure-Cloud-DevOps-Starter-Code/blob/master/C2-AgileDevelopmentwithAzure/project/starter_files/flask-sklearn/make_predict_azure_app.sh).
-The output should look similar to this:
+### Install required Python packages:
+'''
+pip install --upgrade pip
+pip install -r requirements.txt
+'''
 
-```bash
-udacity@Azure:~$ ./make_predict_azure_app.sh
-Port: 443
-{"prediction":[20.35373177134412]}
-```
+### 3. Run Code Quality Checks and Tests
+Run linting to check code quality:
+'''
+pylint --disable=R,C,W1203 app.py
+Run all tests with:
+'''
+make all
+'''
+All tests should pass successfully.
 
-* Output of streamed log files from deployed application
+### 4. Run the Flask Application Locally
+Start the Flask app by running:
+'''
+python app.py
+'''
+The app will run locally at:
 
-> 
+## http://127.0.0.1:5000
+You can test API endpoints or view logs in the terminal.
+
+### 6. Verify Prediction from LOCAL App
+Run the prediction script to test the deployed model:
+'''
+./make_prediction.sh
+'''
+{"prediction":[2.43157479005745]}
+
+### 5. Deploy to Azure App Service
+Deploy your Flask app to Azure using Azure CLI:
+
+'''
+az webapp up --name azureappreem --resource-group Azuredevops
+'''
+Wait for the deployment to complete. The CLI will output your app URL, for example:
+
+### http://azureappreem-eehua9esfaa5awaf.canadacentral-01.azurewebsites.net
+Open this URL in a browser to verify the app is running.
+
+### 6. Verify Prediction from Deployed App
+Run the prediction script to test the deployed model:
+'''
+./make_predict_azure_app.sh
+'''
+{"prediction":[2.43157479005745]}
+### 7. View Live Logs from Azure App Service (Optional)
+To stream logs and troubleshoot, run:
+
+'''
+az webapp log tail --resource-group Azuredevops --name azureappreem
+'''
+This shows live logs of your deployed Flask app.
+
 
 ## Enhancements
 
-<TODO: A short description of how to improve the project in the future>
+Add automated integration tests to cover the Flask app API endpoints.
 
+Implement Azure Key Vault for managing secrets and credentials securely.
+
+Use Azure Blob Storage to store models and enable dynamic model loading.
+
+Add Azure Application Insights for detailed telemetry and performance monitoring.
+
+Containerize the Flask app using Docker and deploy to Azure Kubernetes Service for better scalability.
 ## Demo 
 
-<TODO: Add link Screencast on YouTube>
+[<TODO: Add link Screencast on YouTube>
+](https://youtu.be/RrzEMG9Vz10)
 
 
