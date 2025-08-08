@@ -42,9 +42,11 @@ def predict():
 
         return jsonify({'prediction': prediction})
 
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         LOG.error("Error during prediction: %s", str(e))
         return jsonify({"error": str(e)}), 500
 
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
+
