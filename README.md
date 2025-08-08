@@ -28,6 +28,38 @@ If CI passes, Azure Pipelines builds and deploys the app to Azure App Service.
 the board: https://trello.com/b/6Gux9cPM/udacity
 the file: https://docs.google.com/spreadsheets/d/1pOmuhYMsWYRNB8kvIdr9X0hpKFXW3Ah6EVeq03g6uTw/edit?usp=sharing
 
+## Create GitHub Actions Workflow
+Go to your GitHub Repo
+Got to Actions
+Go to 'New workflow' and 'set up a new workflow yourself'
+Configure your YML file as such:
+name: Python application test with Github Actions
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.10.18
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.10.18
+    - name: Install dependencies
+      run: |
+        make install
+    - name: Lint with pylint
+      run: |
+        make lint
+    - name: Test with pytest
+      run: |
+        make test
+Verify your successfull run in 'All Workflows'
+A prerequisite for having a successfull CI workflow in GitHub Actions is a 'Makefile' and a 'requirements.txt'. In this project, I will only use pylint for code testing, not pytest. In the requirements file, you need to state the python libraries that are needed to get the Flask web app running. With this in place, a new push to the GitHub repo will automatically trigger the CI workflow in GitHub Actions (testing the app.py file). A pylint score below 10 will result in a failed CI build. That's the sign to refactor your code according to the pylint standards.
+
 ## Instructions
 ### Architectural Diagram 
 Description:
@@ -131,5 +163,6 @@ Containerize the Flask app using Docker and deploy to Azure Kubernetes Service f
 
 [<TODO: Add link Screencast on YouTube>
 ](https://youtu.be/RrzEMG9Vz10)
+
 
 
