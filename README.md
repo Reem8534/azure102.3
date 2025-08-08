@@ -59,6 +59,7 @@ jobs:
         make test
 Verify your successfull run in 'All Workflows'
 A prerequisite for having a successfull CI workflow in GitHub Actions is a 'Makefile' and a 'requirements.txt'. In this project, I will only use pylint for code testing, not pytest. In the requirements file, you need to state the python libraries that are needed to get the Flask web app running. With this in place, a new push to the GitHub repo will automatically trigger the CI workflow in GitHub Actions (testing the app.py file). A pylint score below 10 will result in a failed CI build. That's the sign to refactor your code according to the pylint standards.
+!(screenshots/Screenshot 2025-08-07 023208.png)
 
 ## Instructions
 ### Architectural Diagram 
@@ -163,6 +164,7 @@ Containerize the Flask app using Docker and deploy to Azure Kubernetes Service f
 
 [<TODO: Add link Screencast on YouTube>
 ](https://youtu.be/RrzEMG9Vz10)
+
 
 
 
