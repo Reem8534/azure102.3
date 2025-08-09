@@ -23,6 +23,7 @@ GitHub Actions runs make all (install → lint → test).
 
 If CI passes, Azure Pipelines builds and deploys the app to Azure App Service.
 <img width="1027" height="609" alt="image" src="https://github.com/user-attachments/assets/977b35aa-bed7-42f6-b727-9cdd385afa0c" />
+<img width="1207" height="610" alt="image" src="https://github.com/user-attachments/assets/7dc70ee3-10ab-48da-b189-73fe19905a25" />
 
 ## Project Plan
 
@@ -198,6 +199,7 @@ Containerize the Flask app using Docker and deploy to Azure Kubernetes Service f
 
 [<TODO: Add link Screencast on YouTube>
 ](https://youtu.be/RrzEMG9Vz10)
+
 
 
 
