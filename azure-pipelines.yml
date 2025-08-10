@@ -1,33 +1,18 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
+trigger:
+- main
 
-name: Python application
+pool:
+  vmImage: 'ubuntu-latest'
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.10'
 
-permissions:
-  contents: read
+- script: make setup
+  displayName: 'Create virtual environment'
 
-jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.10.18
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.10.18"
-    - name: Install dependencies
-      run: |
-        make install
-    - name: Lint with Pylint
-      run: |
-        make lint
-    - name: Test with pytest
-      run: |
-        make test
+- script: |
+    source ~/.udacity-devops/bin/activate
+    make all
+  displayName: 'Activate Env and Run Makefile'
