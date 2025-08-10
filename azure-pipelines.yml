@@ -5,10 +5,26 @@ pool:
   name: 'reem'
 
 steps:
-- script: make setup
+# Create virtual environment
+- powershell: |
+    python -m venv ~\.udacity-devops
   displayName: 'Create virtual environment'
 
-- script: |
-    source ~/.udacity-devops/bin/activate
-    make all
-  displayName: 'Activate Env and Run Makefile'
+# Install dependencies
+- powershell: |
+    & ~\.udacity-devops\Scripts\Activate.ps1
+    pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install dependencies'
+
+# Run lint
+- powershell: |
+    & ~\.udacity-devops\Scripts\Activate.ps1
+    pylint --disable=R,C,W1203,W0702 app.py
+  displayName: 'Run lint'
+
+# Run tests
+- powershell: |
+    & ~\.udacity-devops\Scripts\Activate.ps1
+    python -m pytest -vv --cov=myrepolib tests/*.py
+  displayName: 'Run tests'
