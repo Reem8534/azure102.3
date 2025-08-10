@@ -2,30 +2,26 @@ trigger:
 - main
 
 pool:
-  name: 'reem'
+  name: reem  # your agent pool name
 
 steps:
-# Create virtual environment
-- powershell: |
-    python -m venv ~\.udacity-devops
-  displayName: 'Create virtual environment'
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.8'
 
-# Install dependencies
 - powershell: |
-    & ~\.udacity-devops\Scripts\Activate.ps1 -Verbose
-    pip install --upgrade pip -Verbose
-    pip install -r requirements.txt -Verbose
+    python -m venv venv
+    .\venv\Scripts\Activate.ps1
+    pip install --upgrade pip
+    pip install -r requirements.txt
   displayName: 'Install dependencies'
 
-
-# Run lint
 - powershell: |
-    & ~\.udacity-devops\Scripts\Activate.ps1
+    .\venv\Scripts\Activate.ps1
     pylint --disable=R,C,W1203,W0702 app.py
-  displayName: 'Run lint'
+  displayName: 'Lint'
 
-# Run tests
 - powershell: |
-    & ~\.udacity-devops\Scripts\Activate.ps1
+    .\venv\Scripts\Activate.ps1
     python -m pytest -vv --cov=myrepolib tests/*.py
-  displayName: 'Run tests'
+  displayName: 'Test'
