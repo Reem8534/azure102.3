@@ -1,27 +1,71 @@
 trigger:
 - main
 
-pool:
-  name: reem  # your agent pool name
+variables:
+  azureServiceConnectionId: '61cac37b-6e28-41ef-8440-637a9e41651d'   # Your Azure RM service connection ID
+  webAppName: 'Azureappreem'                                       # Your Azure Web App name
+  agentPoolName: 'reem'                                            # Your self-hosted agent pool name
+  environmentName: 'azureappreem'                                  # Azure DevOps environment name
+  projectRoot: $(System.DefaultWorkingDirectory)                   # Root folder for code
+  pythonVersion: '3.11'
 
-steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '3.8'
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: BuildJob
+    pool:
+      name: $(agentPoolName)
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(pythonVersion)'
+      displayName: 'Use Python $(pythonVersion)'
 
-- powershell: |
-    python -m venv venv
-    .\venv\Scripts\Activate.ps1
-    pip install --upgrade pip
-    pip install -r requirements.txt
-  displayName: 'Install dependencies'
+    - powershell: |
+        python -m venv antenv
+        & .\antenv\Scripts\Activate.ps1
+        python -m pip install --upgrade pip
+        pip install setuptools
+        pip install -r requirements.txt
+      workingDirectory: $(projectRoot)
+      displayName: "Install requirements"
 
-- powershell: |
-    .\venv\Scripts\Activate.ps1
-    pylint --disable=R,C,W1203,W0702 app.py
-  displayName: 'Lint'
+    - task: ArchiveFiles@2
+      displayName: 'Archive files'
+      inputs:
+        rootFolderOrFile: '$(projectRoot)'
+        includeRootFolder: false
+        archiveType: zip
+        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        replaceExistingArchive: true
 
-- powershell: |
-    .\venv\Scripts\Activate.ps1
-    python -m pytest -vv --cov=myrepolib tests/*.py
-  displayName: 'Test'
+    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      displayName: 'Upload package'
+      artifact: drop
+
+- stage: Deploy
+  displayName: 'Deploy Web App'
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - deployment: DeploymentJob
+    pool:
+      name: $(agentPoolName)
+    environment: $(environmentName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+
+          - task: UsePythonVersion@0
+            inputs:
+              versionSpec: '$(pythonVersion)'
+            displayName: 'Use Python version'
+
+          - task: AzureWebApp@1
+            displayName: 'Deploy Azure Web App : $(webAppName)'
+            inputs:
+              azureSubscription: $(azureServiceConnectionId)
+              appName: $(webAppName)
+              package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
