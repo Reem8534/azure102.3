@@ -1,27 +1,33 @@
-name: Python application test with Github Actions
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
 
-on: [push]
+name: Python application
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-
+    - uses: actions/checkout@v3
     - name: Set up Python 3.10
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v3
       with:
-        python-version: 3.10.18
-
+        python-version: "3.10.18"
     - name: Install dependencies
       run: |
         make install
-
-    - name: Lint with pylint
+    - name: Lint with Pylint
       run: |
         make lint
-
     - name: Test with pytest
       run: |
         make test
