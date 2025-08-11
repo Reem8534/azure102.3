@@ -93,7 +93,7 @@ cd Azure102.3
 like this 
 ![](https://github.com/Reem8534/azure102.3/blob/main/screenshots/Screenshot%202025-08-08%20215804.png)
 
-### 2. Set Up Python Virtual Environment and Install Dependencies
+### 2. Set Up Python Virtual Environment 
 Create and activate a Python virtual environment:
 
 ```bash
@@ -120,6 +120,8 @@ Run install and test and lint with:
 make all
 ```
 All tests should pass successfully as shown here.
+![](https://github.com/Reem8534/azure102.3/blob/main/screenshots/Screenshot%202025-08-11%20103353.png)
+
 
 ### 4. Run the Flask Application Locally
 Start the Flask app by running:
@@ -188,8 +190,9 @@ Add Azure Application Insights for detailed telemetry and performance monitoring
 Containerize the Flask app using Docker and deploy to Azure Kubernetes Service for better scalability.
 
 ## Demo 
-[< link Screencast on YouTube>
-](https://youtu.be/RrzEMG9Vz10)
+[< link Screencast on Github>
+]([https://youtu.be/RrzEMG9Vz10](https://github.com/Reem8534/azure102.3/blob/main/screenshots/clideo_editor_7f0e4246e2834a5c82871f7329fe2673.mp4))
+
 
 
 
