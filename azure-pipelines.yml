@@ -17,7 +17,7 @@ stages:
     pool: myAgentPool
     steps:    
     - script: |
-        pip install -r requirements.txt
+        python3 -m pip install --user -r requirements.txt
       workingDirectory: $(projectRoot)
       displayName: 'Install dependencies'
 
