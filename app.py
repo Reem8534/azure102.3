@@ -19,7 +19,7 @@ def scale(payload):
 
 @app.route("/")
 def home():
-    return "<h3>Sklearn Prediction Home</h3>"
+    return "<h3>Sklearn Prediction Home TEST</h3>"
 
 @app.route("/predict", methods=['POST'])
 def predict():
@@ -49,4 +49,5 @@ def predict():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
+
 
